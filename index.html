@@ -25,10 +25,32 @@
                 <div class="setting">
                     <div class="setting-top">
                         <div class="setting-name">field width:</div>
-                        <div class="setting-value" id="s-width"></div> 
+                        <div class="setting-value" id="o-width">20</div> 
                     </div>
-                    <input type="range" id="field-size" min="10" max="30">
+                    <input type="range"
+                    value="20"
+                    oninput="sliderInput(this.value,`o-width`)"
+                    id="i-width" min="10" max="30">
                 </div>
+                <div class="setting">
+                    <div class="setting-top">
+                        <div class="setting-name">field height:</div>
+                        <div class="setting-value" id="o-height">20</div> 
+                    </div>
+                    <input type="range"
+                    value="20"
+                    oninput="sliderInput(this.value,`o-height`)"
+                    id="i-height" min="10" max="30">
+                </div>
+                <div class="setting">
+                    <div class="setting-top">
+                        <div class="setting-name">solid walls:</div>
+                        <div class="setting-value">
+                            <input type="checkbox" id="i-solid">
+                        </div>
+                    </div>
+                </div>
+                <button class="setting" onclick="applySettings(GameSettings)">Apply</button>
                 
             </div>
         </div>

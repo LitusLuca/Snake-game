@@ -27,7 +27,12 @@ body{
 }
 .setting-top{
     display: flex;
+    justify-content: space-between;
 }
 .setting-value{
     color: red;
+    margin-right: 10px;
+}
+.settings button{
+    margin-left: 20px;
 }
