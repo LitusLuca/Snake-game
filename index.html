@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
 </head>
-<body>
+<body onload="onLoad()" onresize="updateMaxSize()">
     <div class="container">
         <div class="header">
             <H1>Is dit wat lastiger?</H1> 
@@ -17,8 +17,12 @@
             <div class="scores elem">
                 <h1>Scores</h1>
             </div>
-            <div class="game elem">
-                <H1> game </H1>
+            <div class="game elem" id="game">
+                <div class="field" id="field">
+                    <div id="snake">
+                        
+                    </div>
+                </div>
             </div>
             <div class="settings elem">
                 <h1>Settings</h1>
@@ -50,7 +54,7 @@
                         </div>
                     </div>
                 </div>
-                <button class="setting" onclick="applySettings(GameSettings)">Apply</button>
+                <button class="setting" onclick="applySettings(GameSettings)">Restart</button>
                 
             </div>
         </div>
