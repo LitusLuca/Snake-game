@@ -1,0 +1,33 @@
+body{
+    margin: 0%;
+}
+.container{
+    background-color: white;
+}
+.header{
+    padding: 20px;
+    display: flex;
+    background-color: black;
+    color: white
+}
+.content{
+    display: grid;
+    grid-template-columns: 200px auto 200px;
+}
+.elem{
+    border: solid grey 1px;
+    border-radius: 20px;
+    background-color: lightgray;
+    box-shadow: 2px 2px lavender;
+    margin: 10px;
+}
+/* Settings */
+.setting{
+    margin: 5px;
+}
+.setting-top{
+    display: flex;
+}
+.setting-value{
+    color: red;
+}
