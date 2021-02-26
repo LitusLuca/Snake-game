@@ -33,7 +33,6 @@ function fieldLoad(field, settings = {}){
     }
 }
 function updateMaxSize() {
-    console.log("oui");
     var width = document.getElementById("i-width");
     var height = document.getElementById("i-height");
     var game = document.getElementById("game");
@@ -58,28 +57,24 @@ function gameInputs(e,gameloop, direction) {
         if (direction.top != 1) {
             direction.top = -1;
             direction.left = 0;
-            console.log(direction);
         }
     }
     if (e.key == `a` || e.key == `ArrowLeft`) {
         if (direction.left != 1) {
             direction.top = 0;
             direction.left = -1;
-            console.log(direction);
         }
     }
     if (e.key == `s` || e.key == `ArrowDown`) {
         if (direction.top != -1) {
             direction.top = 1;
             direction.left = 0;
-            console.log(direction);
         }
     }
     if (e.key == `d` || e.key == `ArrowRight`) {
         if (direction.left != -1) {
             direction.top = 0;
             direction.left = 1;
-            console.log(direction);
         }
     }
     return false
@@ -90,31 +85,32 @@ function posMod(position) {
     x %= GameSettings.width;
     y %= GameSettings.height
     position.left = (x < 0) ? x + GameSettings.width : x;
-    console.log(x);
+    
     position.top = (y < 0) ? y + GameSettings.height : y;
 }
-function moveSnake(direction, position) {
-    console.log(direction);
-    console.log(position);
+function moveSnake(direction, position, body =[]) {
+    var nBody = Object.assign({}, position);
     position.top += direction.top;
-    
     position.left += direction.left;
-    posMod(position)
-    
-    console.log(position.top % 20);
-
+    if (GameSettings.solidWalls == false){
+        posMod(position)
+    }
+    body.push(nBody)
+    body.shift()
+    document.getElementById(`snake`).innerHTML += `<div class="sBody sPart" style="transform: translate(${nBody.left * 20}px, ${nBody.top *20}px);"></div>`;
+    var wBody = document.getElementsByClassName(`sBody`)
+    wBody[0].remove()
     var head = document.getElementById(`sHead`);
-    console.log(head.style.transform);
     head.style.transform = `translate(${position.left * 20}px, ${position.top *20}px)`
-    console.log(direction);
 
 }
 function startGame(){
     document.removeEventListener(`keydown`, startGame)
     var position = {top: 5, left: 5}
     var direction = {top: -1, left: 0}
+    var body = [{top: 6, left:  5}]
     document.addEventListener(`keypress`, function(e){gameInputs(e, loop, direction)})
-    var loop = self.setInterval(function(){moveSnake(direction, position)}, 300)
+    var loop = self.setInterval(function(){moveSnake(direction, position, body)}, 300)
     
 }
 document.addEventListener(`keydown`, startGame);
