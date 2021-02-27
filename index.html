@@ -14,10 +14,13 @@
             <H1>Is dit wat lastiger?</H1> 
         </div>
         <div class="content">
+            <!-- Scores tab -->
             <div class="scores elem">
                 <h1>Scores</h1>
             </div>
+            <!-- game tab -->
             <div class="game elem" id="game">
+                <h1 id="score-field">Score:<h1 id="score-value" class="value">1 </h1></h1>
                 <div class="field" id="field">
                     <div id="snake">
                         <div id="sHead" class="sHead sPart" style="transform: translate(100px, 100px);" ></div>
@@ -26,12 +29,13 @@
                     <div id="apple" style="transform: translate(40px, 40px);"></div>
                 </div>
             </div>
+            <!-- settings tab -->
             <div class="settings elem">
                 <h1>Settings</h1>
                 <div class="setting">
                     <div class="setting-top">
                         <div class="setting-name">field width:</div>
-                        <div class="setting-value" id="o-width">20</div> 
+                        <div class="value" id="o-width">20</div> 
                     </div>
                     <input type="range"
                     value="20"
@@ -41,7 +45,7 @@
                 <div class="setting">
                     <div class="setting-top">
                         <div class="setting-name">field height:</div>
-                        <div class="setting-value" id="o-height">20</div> 
+                        <div class="value" id="o-height">20</div> 
                     </div>
                     <input type="range"
                     value="20"
@@ -51,7 +55,7 @@
                 <div class="setting">
                     <div class="setting-top">
                         <div class="setting-name">solid walls:</div>
-                        <div class="setting-value">
+                        <div class="value">
                             <input type="checkbox" id="i-solid">
                         </div>
                     </div>

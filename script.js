@@ -11,8 +11,8 @@ function sliderInput(input, outputId){
     
 }
 function applySettings(settings){
-    settings.width = document.getElementById(`i-width`).value;
-    settings.height = document.getElementById(`i-height`).value;
+    settings.width = parseInt(document.getElementById(`i-width`).value);
+    settings.height = parseInt(document.getElementById(`i-height`).value);
     settings.solidWalls = document.getElementById("i-solid").checked;
 
     console.log(settings);
@@ -113,7 +113,9 @@ function moveSnake(direction, position, body =[], loop) {
         body.shift();
     }
     checkCollision(loop, position, body).then(function(result){
-        console.log(result);
+        if (result) {
+            document.getElementById(`score-value`).innerText = result
+        }
     })
     var head = document.getElementById(`sHead`);
     head.style.transform = `translate(${position.left * 20}px, ${position.top *20}px)`
@@ -141,10 +143,13 @@ function checkCollision(loop, headPos, body =[]) {
         body.forEach(part => {
             if (part.left == headPos.left && part.top == headPos.top) {
                 window.clearInterval(loop);
-                resolve(body.length)
+                resolve(false)
             }
             //console.log(part, headPos);
         });
-        resolve(false)
+        resolve(body.length)
     });
+}
+function gameOver(loop, body){
+    window.clearInterval(loop)
 }

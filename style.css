@@ -37,7 +37,7 @@ h1{
     display: flex;
     justify-content: space-between;
 }
-.setting-value{
+.value{
     color: red;
     margin-right: 10px;
 }
@@ -80,6 +80,11 @@ h1{
     background-color: red;
     left: 0;
     top: 0;
+}
+#score-field{
+    display: flex;
+    justify-content: space-between;
+    width: 150px;
 }
 /* Scores */
 .scores{
