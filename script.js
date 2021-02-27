@@ -3,6 +3,7 @@ var GameSettings = {
     width: 20,
     height: 20,
     solidWalls: false,
+    apple_pos: {left: 2, top: 2}
 }
 
 function sliderInput(input, outputId){
@@ -15,7 +16,7 @@ function applySettings(settings){
     settings.solidWalls = document.getElementById("i-solid").checked;
 
     console.log(settings);
-    fieldLoad(document.getElementById(`field`), GameSettings)
+    fieldLoad(document.getElementById(`field`), GameSettings);
 
 }
 function fieldLoad(field, settings = {}){
@@ -26,10 +27,10 @@ function fieldLoad(field, settings = {}){
     style.width = `${size * settings.width}px`;
     style.height = `${size*settings.height}px`;
     if (settings.solidWalls) {
-        style.border = `double white 6px`
+        style.border = `double white 6px`;
     }
     else{
-        style.border = `none`
+        style.border = `none`;
     }
 }
 function updateMaxSize() {
@@ -41,10 +42,10 @@ function updateMaxSize() {
 }
 function onLoad() {
     fieldLoad(document.getElementById(`field`), GameSettings);
-    updateMaxSize()
+    updateMaxSize();
 }
 function onResize() {
-    updateMaxSize()
+    updateMaxSize();
 }
 
 //Game:
@@ -88,29 +89,62 @@ function posMod(position) {
     
     position.top = (y < 0) ? y + GameSettings.height : y;
 }
-function moveSnake(direction, position, body =[]) {
+function moveSnake(direction, position, body =[], loop) {
+    var notEaten = true;
     var nBody = Object.assign({}, position);
     position.top += direction.top;
     position.left += direction.left;
     if (GameSettings.solidWalls == false){
-        posMod(position)
+        posMod(position);
     }
-    body.push(nBody)
-    body.shift()
+    body.push(nBody);
+    
     document.getElementById(`snake`).innerHTML += `<div class="sBody sPart" style="transform: translate(${nBody.left * 20}px, ${nBody.top *20}px);"></div>`;
-    var wBody = document.getElementsByClassName(`sBody`)
-    wBody[0].remove()
+    if (position.top == GameSettings.apple_pos.top && position.left == GameSettings.apple_pos.left) {
+        console.log(`succes`);
+        GameSettings.apple_pos = randomPos(GameSettings.width, GameSettings.height)
+        document.getElementById(`apple`).style.transform = `translate(${GameSettings.apple_pos.left * 20}px, ${GameSettings.apple_pos.top *20}px)`
+        notEaten = false;
+    }
+    console.log(position, GameSettings.apple_pos);
+    if (notEaten == true) {
+        var wBody = document.getElementsByClassName(`sBody`);
+        wBody[0].remove();
+        body.shift();
+    }
+    checkCollision(loop, position, body).then(function(result){
+        console.log(result);
+    })
     var head = document.getElementById(`sHead`);
     head.style.transform = `translate(${position.left * 20}px, ${position.top *20}px)`
 
 }
 function startGame(){
-    document.removeEventListener(`keydown`, startGame)
-    var position = {top: 5, left: 5}
-    var direction = {top: -1, left: 0}
-    var body = [{top: 6, left:  5}]
-    document.addEventListener(`keypress`, function(e){gameInputs(e, loop, direction)})
-    var loop = self.setInterval(function(){moveSnake(direction, position, body)}, 300)
+    document.removeEventListener(`keydown`, startGame);
+    var position = {left: 5, top: 5};
+    var direction = {top: -1, left: 0};
+    var body = [{left: 5, top:  6}];
+    document.addEventListener(`keypress`, function(e){gameInputs(e, loop, direction)});
+    var loop = self.setInterval(function(){moveSnake(direction, position, body, loop);}, 300);
     
 }
 document.addEventListener(`keydown`, startGame);
+
+
+function randomPos(width, height){
+    var x= Math.floor(Math.random() * width);
+    var y= Math.floor(Math.random() * height);
+    return {left: x, top: y};
+}
+function checkCollision(loop, headPos, body =[]) {
+    return new Promise(resolve => {
+        body.forEach(part => {
+            if (part.left == headPos.left && part.top == headPos.top) {
+                window.clearInterval(loop);
+                resolve(body.length)
+            }
+            //console.log(part, headPos);
+        });
+        resolve(false)
+    });
+}
