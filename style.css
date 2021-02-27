@@ -86,7 +86,41 @@ h1{
     justify-content: space-between;
     width: 150px;
 }
+#gameOver-field{
+    background-color: black;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    opacity: 60%;
+    
+}
+.field h1{
+    left: 50%;
+    top: 30%;
+    transform: translate(-50%,0);
+    position: absolute;
+    color: white;
+    z-index: 3;
+    text-align: center;
+    font-size: 50px;
+}
 /* Scores */
 .scores{
     height: 250px;
+}
+.scores table{
+    width: 100%;
+}
+.scores tr{
+    display: flex;
+    justify-content: space-between;
+    border: black solid 1px;
+}
+.tablehead{
+    background-color: lavender;
+    
+}
+.tablerow{
+    background-color: whitesmoke;
 }

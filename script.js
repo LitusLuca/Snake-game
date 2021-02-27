@@ -49,10 +49,10 @@ function onResize() {
 }
 
 //Game:
-function gameInputs(e,gameloop, direction) {
+function gameInputs(e,gameloop, direction, body) {
     console.log(e);
     if (e.key == "Escape" || e.key == `q`) {
-        window.clearInterval(gameloop);
+        gameOver(gameloop, body.length)
     }
     if (e.key == `w` || e.key == `ArrowUp`) {
         if (direction.top != 1) {
@@ -126,7 +126,7 @@ function startGame(){
     var position = {left: 5, top: 5};
     var direction = {top: -1, left: 0};
     var body = [{left: 5, top:  6}];
-    document.addEventListener(`keypress`, function(e){gameInputs(e, loop, direction)});
+    document.addEventListener(`keypress`, function(e){gameInputs(e, loop, direction, body)});
     var loop = self.setInterval(function(){moveSnake(direction, position, body, loop);}, 300);
     
 }
@@ -142,7 +142,7 @@ function checkCollision(loop, headPos, body =[]) {
     return new Promise(resolve => {
         body.forEach(part => {
             if (part.left == headPos.left && part.top == headPos.top) {
-                window.clearInterval(loop);
+                gameOver(loop, body.length)
                 resolve(false)
             }
             //console.log(part, headPos);
@@ -150,6 +150,29 @@ function checkCollision(loop, headPos, body =[]) {
         resolve(body.length)
     });
 }
-function gameOver(loop, body){
+function gameOver(loop, score){
     window.clearInterval(loop)
+    document.getElementById(`score-table`).innerHTML += `
+    <tr class="tablerow">
+        <td>${formatDate()}</td>
+        <td class="value">${score}</td>
+    </tr>`
+    document.getElementById(`field`).innerHTML +=`
+    <div id="gameOver-field">
+    </div>
+    <H1> GameOver!! </H1>`
+    
+}
+function formatDate() {
+    var d = new Date(),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
 }
