@@ -66,32 +66,32 @@ function onResize() {
 }
 
 //Game:
-function gameInputs(e,gameloop, direction, body) {
+function gameInputs(e,gameloop, direction, body, curDirection) {
     console.log(e);
     if (e.key == "Escape" || e.key == `q`) {
         gameOver(gameloop, body)
         document.removeEventListener(`keypress`, function(e){gameInputs(e, loop, direction, body)});
     }
     if (e.key == `w` || e.key == `ArrowUp`) {
-        if (direction.top != 1) {
+        if (curDirection.top != 1) {
             direction.top = -1;
             direction.left = 0;
         }
     }
     if (e.key == `a` || e.key == `ArrowLeft`) {
-        if (direction.left != 1) {
+        if (curDirection.left != 1) {
             direction.top = 0;
             direction.left = -1;
         }
     }
     if (e.key == `s` || e.key == `ArrowDown`) {
-        if (direction.top != -1) {
+        if (curDirection.top != -1) {
             direction.top = 1;
             direction.left = 0;
         }
     }
     if (e.key == `d` || e.key == `ArrowRight`) {
-        if (direction.left != -1) {
+        if (curDirection.left != -1) {
             direction.top = 0;
             direction.left = 1;
         }
@@ -107,11 +107,13 @@ function posMod(position) {
     
     position.top = (y < 0) ? y + GameSettings.height : y;
 }
-function moveSnake(direction, position, body =[], loop) {
+function moveSnake(direction, position, body =[], loop, curDirection) {
     var notEaten = true;
     var nBody = Object.assign({}, position);
     position.top += direction.top;
     position.left += direction.left;
+    curDirection.top = direction.top;
+    curDirection.left = direction.left
     if (GameSettings.solidWalls == false){
         posMod(position);
     }
@@ -137,17 +139,17 @@ function moveSnake(direction, position, body =[], loop) {
     var head = document.getElementById(`sHead`);
     head.style.transform = `translate(${position.left * 20}px, ${position.top *20}px)`
     
-
 }
 function startGame(){
     GameSettings.forceQuit = false;
     document.removeEventListener(`keydown`, startGame);
     var position = {left: 5, top: 5};
     var direction = {top: -1, left: 0};
+    var curDirection = {top: -1, left: 0};
     var body = [{left: 5, top:  6}];
     //document.addEventListener(`keypress`, function(e){gameInputs(e, loop, direction, body)}, true);
-    registerEventListener(document, {event: `keypress`,callback: function(e){gameInputs(e, loop, direction, body)}})
-    var loop = self.setInterval(function(){moveSnake(direction, position, body, loop);}, GameSettings.speed);
+    registerEventListener(document, {event: `keypress`,callback: function(e){gameInputs(e, loop, direction, body, curDirection)}})
+    var loop = self.setInterval(function(){moveSnake(direction, position, body, loop, curDirection);}, GameSettings.speed);
     
 }
 document.addEventListener(`keydown`, startGame);

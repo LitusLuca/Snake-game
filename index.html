@@ -11,7 +11,9 @@
 <body onload="onLoad()" onresize="updateMaxSize()">
     <div class="container">
         <div class="header">
-            <H1>Is dit wat lastiger?</H1> 
+            <H1>Is dit wat lastiger?</H1>
+            <p>up,left,down,right: W,A,S,D <br>
+            restart / quit: Q</p>
         </div>
         <div class="content">
             <!-- Scores tab -->
@@ -34,7 +36,7 @@
             </div>
             <!-- game tab -->
             <div class="game elem" id="game">
-                <h1 id="score-field">Score:<h1 id="score-value" class="value">1 </h1></h1>
+                <h1 id="score-field">Score:<span id="score-value" class="value">1 <span></h1>
                 <div class="field" id="field">
                     <div id="snake">
                         <div id="sHead" class="sHead sPart" style="transform: translate(100px, 100px);" ></div>

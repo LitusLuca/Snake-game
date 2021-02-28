@@ -156,3 +156,11 @@ h1{
     border-spacing: 0;
     
 }
+/* other */
+.header{
+    display: flex;
+
+}
+.header *{
+    margin:auto 10px;
+}
