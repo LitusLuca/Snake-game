@@ -3,7 +3,8 @@ var GameSettings = {
     width: 20,
     height: 20,
     solidWalls: false,
-    apple_pos: {left: 2, top: 2}
+    apple_pos: {left: 2, top: 2},
+    forceQuit: false,
 }
 
 function sliderInput(input, outputId){
@@ -18,6 +19,7 @@ function applySettings(settings){
 
     console.log(settings);
     fieldLoad(document.getElementById(`field`), GameSettings);
+    settings.forceQuit = true;
 
 }
 function fieldLoad(field, settings = {}){
@@ -113,7 +115,7 @@ function moveSnake(direction, position, body =[], loop) {
         wBody[0].remove();
         body.shift();
     }
-    checkCollision(loop, position, body, direction).then(function(result){
+    checkCollision(loop, position, body).then(function(result){
         if (result) {
             document.getElementById(`score-value`).innerText = result
         }
@@ -141,19 +143,26 @@ function randomPos(width, height){
     var y= Math.floor(Math.random() * height);
     return {left: x, top: y};
 }
-function checkCollision(loop, headPos, body =[], direction) {
+function checkCollision(loop, headPos, body =[]) {
     return new Promise(resolve => {
         body.forEach(part => {
             if (part.left == headPos.left && part.top == headPos.top) {
-                gameOver(loop, body, direction)
-                resolve(false)
+                gameOver(loop, body);
+                resolve(false);
+                console.log(`collision`);
             }
             //console.log(part, headPos);
         });
-        resolve(body.length)
+        if (GameSettings.forceQuit == true) {
+            gameOver(loop, body);
+            resolve(false);
+            console.log(`forced`);
+            console.log(GameSettings);
+        }
+        resolve(body.length);
     });
 }
-function gameOver(loop, body, direction){
+function gameOver(loop, body){
     window.clearInterval(loop)
     document.getElementById(`score-table`).innerHTML += `
     <tr class="tablerow">
@@ -184,6 +193,7 @@ function formatDate() {
     return [year, month, day].join('-');
 }
 function restartGame() {
+    
     document.removeEventListener(`keypress`, restartGame);
     document.getElementById(`field`).innerHTML = `
     <div id="snake">
@@ -193,6 +203,7 @@ function restartGame() {
     <div id="apple" style="transform: translate(40px, 40px);"></div>`
     console.log(`new game`);
     applySettings(GameSettings);
+    GameSettings.forceQuit = false;
     startGame();
 }
 
