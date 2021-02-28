@@ -14,6 +14,7 @@ function applySettings(settings){
     settings.width = parseInt(document.getElementById(`i-width`).value);
     settings.height = parseInt(document.getElementById(`i-height`).value);
     settings.solidWalls = document.getElementById("i-solid").checked;
+    settings.apple_pos= {left: 2, top: 2}
 
     console.log(settings);
     fieldLoad(document.getElementById(`field`), GameSettings);
@@ -37,7 +38,7 @@ function updateMaxSize() {
     var width = document.getElementById("i-width");
     var height = document.getElementById("i-height");
     var game = document.getElementById("game");
-    width.max = Math.floor((game.offsetWidth - 40) / 20);
+    width.max = Math.floor((game.offsetWidth - 40 - 150) / 20);
     height.max = Math.floor((game.offsetHeight - 40) / 20);
 }
 function onLoad() {
@@ -52,7 +53,8 @@ function onResize() {
 function gameInputs(e,gameloop, direction, body) {
     console.log(e);
     if (e.key == "Escape" || e.key == `q`) {
-        gameOver(gameloop, body.length)
+        gameOver(gameloop, body)
+        document.removeEventListener(`keypress`, function(e){gameInputs(e, loop, direction, body)});
     }
     if (e.key == `w` || e.key == `ArrowUp`) {
         if (direction.top != 1) {
@@ -106,19 +108,19 @@ function moveSnake(direction, position, body =[], loop) {
         document.getElementById(`apple`).style.transform = `translate(${GameSettings.apple_pos.left * 20}px, ${GameSettings.apple_pos.top *20}px)`
         notEaten = false;
     }
-    console.log(position, GameSettings.apple_pos);
     if (notEaten == true) {
         var wBody = document.getElementsByClassName(`sBody`);
         wBody[0].remove();
         body.shift();
     }
-    checkCollision(loop, position, body).then(function(result){
+    checkCollision(loop, position, body, direction).then(function(result){
         if (result) {
             document.getElementById(`score-value`).innerText = result
         }
     })
     var head = document.getElementById(`sHead`);
     head.style.transform = `translate(${position.left * 20}px, ${position.top *20}px)`
+    console.log(body.length);
 
 }
 function startGame(){
@@ -126,7 +128,8 @@ function startGame(){
     var position = {left: 5, top: 5};
     var direction = {top: -1, left: 0};
     var body = [{left: 5, top:  6}];
-    document.addEventListener(`keypress`, function(e){gameInputs(e, loop, direction, body)});
+    //document.addEventListener(`keypress`, function(e){gameInputs(e, loop, direction, body)}, true);
+    registerEventListener(document, {event: `keypress`,callback: function(e){gameInputs(e, loop, direction, body)}})
     var loop = self.setInterval(function(){moveSnake(direction, position, body, loop);}, 300);
     
 }
@@ -138,11 +141,11 @@ function randomPos(width, height){
     var y= Math.floor(Math.random() * height);
     return {left: x, top: y};
 }
-function checkCollision(loop, headPos, body =[]) {
+function checkCollision(loop, headPos, body =[], direction) {
     return new Promise(resolve => {
         body.forEach(part => {
             if (part.left == headPos.left && part.top == headPos.top) {
-                gameOver(loop, body.length)
+                gameOver(loop, body, direction)
                 resolve(false)
             }
             //console.log(part, headPos);
@@ -150,18 +153,22 @@ function checkCollision(loop, headPos, body =[]) {
         resolve(body.length)
     });
 }
-function gameOver(loop, score){
+function gameOver(loop, body, direction){
     window.clearInterval(loop)
     document.getElementById(`score-table`).innerHTML += `
     <tr class="tablerow">
         <td>${formatDate()}</td>
-        <td class="value">${score}</td>
-    </tr>`
+        <td class="value">${body.length}</td>
+    </tr>`;
     document.getElementById(`field`).innerHTML +=`
     <div id="gameOver-field">
     </div>
-    <H1> GameOver!! </H1>`
-    
+    <H1> Game Over!! <br> </H1>
+    <p> press any key to restart </p>`;
+    //document.removeEventListener(`keypress`, function(e){gameInputs(e, loop, direction, body)});
+    unRegisterAllEventListeners(document)
+    setTimeout(() => {document.addEventListener(`keypress`, restartGame);
+    }, 1000);
 }
 function formatDate() {
     var d = new Date(),
@@ -175,4 +182,40 @@ function formatDate() {
         day = '0' + day;
 
     return [year, month, day].join('-');
+}
+function restartGame() {
+    document.removeEventListener(`keypress`, restartGame);
+    document.getElementById(`field`).innerHTML = `
+    <div id="snake">
+        <div id="sHead" class="sHead sPart" style="transform: translate(100px, 100px);" ></div>
+        <div class="sBody sPart" style="transform: translate(100px, 120px);"></div>
+    </div>
+    <div id="apple" style="transform: translate(40px, 40px);"></div>`
+    console.log(`new game`);
+    applySettings(GameSettings);
+    startGame();
+}
+
+function registerEventListener(obj, params) {
+	if ( typeof obj._eventListeners == 'undefined' ) {
+		obj._eventListeners = [];	
+	}
+	
+	obj.addEventListener(params.event, params.callback);
+	
+	var eventListeners = obj._eventListeners;
+	eventListeners.push(params);
+	obj._eventListeners = eventListeners;
+}
+function unRegisterAllEventListeners(obj) {
+	if ( typeof obj._eventListeners == 'undefined' || obj._eventListeners.length == 0 ) {
+		return;	
+	}
+	
+	for(var i = 0, len = obj._eventListeners.length; i < len; i++) {
+		var e = obj._eventListeners[i];
+		obj.removeEventListener(e.event, e.callback);
+	}
+
+	obj._eventListeners = [];
 }
