@@ -26,11 +26,10 @@
                                     <th><span class="text value">Score</span></th>
                                 </tr>
                             </thead>
-                            <tbody id="score-table">
-                                
+                            <tbody id="score-table">                                
                             </tbody>
                         </table>
-                        </div>
+                    </div>
                 </div>
             </div>
             <!-- game tab -->
@@ -69,17 +68,25 @@
                 </div>
                 <div class="setting">
                     <div class="setting-top">
-                        <div class="setting-name">solid walls:</div>
+                        <div class="setting-name">speed:</div>
+                        <div class="value" id="o-speed">3</div> 
+                    </div>
+                    <input type="range"
+                    value="3"
+                    oninput="sliderInput(this.value,`o-speed`)"
+                    id="i-speed" min="1" max="5">
+                </div>
+                <div class="setting">
+                    <div class="setting-top">
+                        <div class="setting-name coming">(coming) solid walls:</div>
                         <div class="value">
-                            <input type="checkbox" id="i-solid">
+                            <input type="checkbox" id="i-solid" disabled="true">
                         </div>
                     </div>
                 </div>
-                <button id="setting-apply" class="setting" onclick="applySettings(GameSettings)">Restart</button>
-                
+                <button id="setting-apply" class="setting" onclick="applySettings(GameSettings)">Restart</button>                
             </div>
         </div>
-    </div>
-    
+    </div>    
 </body>
 </html>

@@ -28,7 +28,7 @@ h1{
 }
 /* Settings */
 .settings{
-    height: 250px;
+    height: 280px;
 }
 .setting{
     margin: 5px;
@@ -44,6 +44,9 @@ h1{
 }
 .settings button{
     margin-left: 20px;
+}
+.coming{
+    color: gray;
 }
 /*game*/
 .game{

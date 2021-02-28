@@ -6,6 +6,7 @@ var GameSettings = {
     solidWalls: false,
     apple_pos: {left: 2, top: 2},
     forceQuit: false,
+    speed: 300,
 }
 
 function sliderInput(input, outputId){
@@ -16,7 +17,8 @@ function applySettings(settings){
     settings.width = parseInt(document.getElementById(`i-width`).value);
     settings.height = parseInt(document.getElementById(`i-height`).value);
     settings.solidWalls = document.getElementById("i-solid").checked;
-    settings.apple_pos= {left: 2, top: 2}
+    settings.apple_pos= {left: 2, top: 2};
+    settings.speed = (parseInt(document.getElementById(`i-speed`).value) - 6) * -100
 
     console.log(settings);
     fieldLoad(document.getElementById(`field`), GameSettings);
@@ -145,7 +147,7 @@ function startGame(){
     var body = [{left: 5, top:  6}];
     //document.addEventListener(`keypress`, function(e){gameInputs(e, loop, direction, body)}, true);
     registerEventListener(document, {event: `keypress`,callback: function(e){gameInputs(e, loop, direction, body)}})
-    var loop = self.setInterval(function(){moveSnake(direction, position, body, loop);}, 300);
+    var loop = self.setInterval(function(){moveSnake(direction, position, body, loop);}, GameSettings.speed);
     
 }
 document.addEventListener(`keydown`, startGame);
