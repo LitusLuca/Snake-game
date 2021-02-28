@@ -165,7 +165,7 @@ function checkCollision(loop, headPos, body =[]) {
 function gameOver(loop, body){
     window.clearInterval(loop)
     document.getElementById(`score-table`).innerHTML += `
-    <tr class="tablerow">
+    <tr class="tableRow">
         <td>${formatDate()}</td>
         <td class="value">${body.length}</td>
     </tr>`;

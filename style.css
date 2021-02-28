@@ -38,6 +38,7 @@ h1{
     justify-content: space-between;
 }
 .value{
+    text-align: right;
     color: red;
     margin-right: 10px;
 }
@@ -116,20 +117,39 @@ h1{
 }
 /* Scores */
 .scores{
-    height: 250px;
+    height: 400px;
 }
-.scores table{
-    width: 100%;
+#table-wrapper {
+    position: relative;
 }
-.scores tr{
-    display: flex;
-    justify-content: space-between;
-    border: black solid 1px;
+#table-scroll {
+    height: calc(400px - 74px - 40px - 20px);
+    overflow: auto;
+    margin-top: 20px;
 }
-.tablehead{
-    background-color: lavender;
-    
+#table-wrapper table {
+    width: 95%;
+    border: gray 1px solid;
+    margin-left: 6px;
+    border-collapse: collapse;
+    border-spacing: 0;
+
 }
-.tablerow{
+.tableHead{
+  position: absolute;
+  width: 95%;
+  display: flex;
+  justify-content: space-between;
+  top: -20px;
+  border: solid grey 1px;
+  background-color: lavender;
+  left: 6px;
+  
+}
+.tableRow{
     background-color: whitesmoke;
+    width: 100%;
+    border: solid 1px gray;
+    border-spacing: 0;
+    
 }
