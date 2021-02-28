@@ -1,4 +1,5 @@
 
+
 var GameSettings = {
     width: 20,
     height: 20,
@@ -45,6 +46,18 @@ function updateMaxSize() {
 function onLoad() {
     fieldLoad(document.getElementById(`field`), GameSettings);
     updateMaxSize();
+    var prev_scores = JSON.parse(localStorage.getItem(`scores`));
+    if (prev_scores) {
+        prev_scores.forEach(score => {
+            document.getElementById(`score-table`).innerHTML += `
+                <tr class="tableRow" data-score="${JSON.stringify(score)}">
+                    <td>${formatDate(score.date)}</td>
+                    <td class="value">${score.score}</td>
+                </tr>`;
+            
+        });
+    }
+    
 }
 function onResize() {
     updateMaxSize();
@@ -169,6 +182,16 @@ function gameOver(loop, body){
         <td>${formatDate()}</td>
         <td class="value">${body.length}</td>
     </tr>`;
+    var prev_scores = JSON.parse(localStorage.getItem("scores"));
+    console.log(prev_scores);
+    if (prev_scores) {
+        prev_scores.push({date: (new Date()).toISOString(), score: body.length, settings: GameSettings})
+    }
+    else{
+        prev_scores =[{date: (new Date()).toISOString(), score: body.length, settings: GameSettings}]
+    }
+    console.log(prev_scores);
+    localStorage.setItem("scores", JSON.stringify(prev_scores))
     document.getElementById(`field`).innerHTML +=`
     <div id="gameOver-field">
     </div>
@@ -179,11 +202,15 @@ function gameOver(loop, body){
     setTimeout(() => {document.addEventListener(`keypress`, restartGame);
     }, 1000);
 }
-function formatDate() {
-    var d = new Date(),
-        month = '' + (d.getMonth() + 1),
-        day = '' + d.getDate(),
-        year = d.getFullYear();
+function formatDate(iso) {
+    if (iso) {
+        var d = new Date(iso)
+    }else{
+        var d = new Date()
+    }
+    month = '' + (d.getMonth() + 1);
+    day = '' + d.getDate();
+    year = d.getFullYear();
 
     if (month.length < 2) 
         month = '0' + month;
