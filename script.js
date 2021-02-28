@@ -20,12 +20,11 @@ function applySettings(settings){
     console.log(settings);
     fieldLoad(document.getElementById(`field`), GameSettings);
     settings.forceQuit = true;
+    document.getElementById(`setting-apply`).blur();
 
 }
 function fieldLoad(field, settings = {}){
     var size = 20
-    console.log("loading");
-    console.log(field);
     style = field.style;
     style.width = `${size * settings.width}px`;
     style.height = `${size*settings.height}px`;
@@ -122,10 +121,11 @@ function moveSnake(direction, position, body =[], loop) {
     })
     var head = document.getElementById(`sHead`);
     head.style.transform = `translate(${position.left * 20}px, ${position.top *20}px)`
-    console.log(body.length);
+    
 
 }
 function startGame(){
+    GameSettings.forceQuit = false;
     document.removeEventListener(`keydown`, startGame);
     var position = {left: 5, top: 5};
     var direction = {top: -1, left: 0};
