@@ -159,8 +159,12 @@ h1{
 /* other */
 .header{
     display: flex;
+    justify-content: space-between;
 
 }
 .header *{
     margin:auto 10px;
+}
+.header .left{
+    display: flex;
 }
