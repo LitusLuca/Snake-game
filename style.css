@@ -160,6 +160,7 @@ h1{
 .header{
     display: flex;
     justify-content: space-between;
+    background-image: url("background-head.png");
 
 }
 .header *{
